@@ -1,0 +1,4 @@
+changelogFile: changelog/db.changelog-master.sql
+url: jdbc:databricks://<SERVER_HOSTNAME>:443/default;transportMode=http;ssl=1;httpPath=<HTTP_PATH>;AuthMech=3;ConnCatalog=<CATALOGO>;ConnSchema=default;
+username: token
+password: <DATABRICKS_TOKEN>

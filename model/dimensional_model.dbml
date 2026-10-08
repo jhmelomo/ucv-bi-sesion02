@@ -1,0 +1,73 @@
+// =========================================================
+// UCV Retail - Modelo Dimensional (Star Schema)
+// Laboratorio 04 - Business Intelligence and Big Data
+// Autor: 7003087142
+// Fecha: 22/09/26
+// =========================================================
+// Proceso de negocio: VENTAS
+// Capa Medallion: Gold (consumo analítico)
+// Namespace Unity Catalog: workspace.gold.<tabla>
+// =========================================================
+
+Table dim_date {
+  date_key int [pk, note: 'Clave sustituta de tiempo']
+  full_date date [note: 'Fecha completa']
+  day int [note: 'Día del mes (1-31)']
+  month int [note: 'Mes (1-12)']
+  month_name varchar [note: 'Nombre del mes']
+  quarter int [note: 'Trimestre (1-4)']
+  year int [note: 'Año']
+
+  Note: 'Dimensión tiempo con jerarquía Year → Quarter → Month → Day'
+}
+
+Table dim_product {
+  product_key int [pk, note: 'Clave sustituta de producto']
+  product_id int [note: 'ID natural del producto (origen)']
+  product_name varchar [note: 'Nombre del producto']
+  brand varchar [note: 'Marca']
+  subcategory varchar [note: 'Subcategoría']
+  category varchar [note: 'Categoría']
+
+  Note: 'Dimensión producto con jerarquía Category → Subcategory → Product'
+}
+
+Table dim_store {
+  store_key int [pk, note: 'Clave sustituta de tienda']
+  store_id int [note: 'ID natural de la tienda (origen)']
+  store_name varchar [note: 'Nombre de la tienda']
+  city varchar [note: 'Ciudad']
+  region varchar [note: 'Región']
+  country varchar [note: 'País']
+
+  Note: 'Dimensión tienda con jerarquía Country → Region → City → Store'
+}
+
+Table dim_customer {
+  customer_key int [pk, note: 'Clave sustituta de cliente']
+  customer_id int [note: 'ID natural del cliente (origen)']
+  customer_name varchar [note: 'Nombre del cliente']
+  segment varchar [note: 'Segmento de cliente (Premium, Regular, etc.)']
+  city varchar [note: 'Ciudad del cliente']
+  country varchar [note: 'País del cliente']
+
+  Note: 'Dimensión cliente; segmento permite analizar por tipo de cliente'
+}
+
+Table fact_sales {
+  date_key int [note: 'FK a dim_date']
+  product_key int [note: 'FK a dim_product']
+  store_key int [note: 'FK a dim_store']
+  customer_key int [note: 'FK a dim_customer']
+  quantity int [note: 'Medida: unidades vendidas']
+  unit_price decimal [note: 'Medida contextual: precio unitario']
+  sales_amount decimal [note: 'Medida: importe total de la venta']
+
+  Note: 'Tabla de hechos del proceso VENTAS; grano: una fila por línea de venta'
+}
+
+// Relaciones (cardinalidad 1:N)
+Ref: fact_sales.date_key > dim_date.date_key
+Ref: fact_sales.product_key > dim_product.product_key
+Ref: fact_sales.store_key > dim_store.store_key
+Ref: fact_sales.customer_key > dim_customer.customer_key

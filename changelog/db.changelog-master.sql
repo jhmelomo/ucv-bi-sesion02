@@ -85,3 +85,37 @@ CREATE TABLE IF NOT EXISTS workspace.gold.fact_sales (
 USING DELTA;
 
 --rollback DROP TABLE IF EXISTS workspace.gold.fact_sales;
+
+--changeset estudiante:009
+CREATE SCHEMA IF NOT EXISTS workspace.bronze
+COMMENT 'Bronze - raw data layer';
+
+--rollback DROP SCHEMA IF EXISTS workspace.bronze;
+
+--changeset estudiante:010
+CREATE SCHEMA IF NOT EXISTS workspace.silver
+COMMENT 'Silver - cleaned and standardized data layer';
+
+--rollback DROP SCHEMA IF EXISTS workspace.silver;
+
+--changeset estudiante:011
+CREATE TABLE IF NOT EXISTS workspace.bronze.sales_raw (
+    sale_id STRING,
+    sale_data STRING,
+    product_id STRING,
+    quantity STRING,
+    unit_price STRING
+)
+USING DELTA;
+
+--rollback DROP TABLE IF EXISTS workspace.bronze.sales_raw;
+
+--changeset estudiante:012
+CREATE TABLE IF NOT EXISTS workspace.bronze.products_raw (
+    product_id STRING,
+    product_name STRING,
+    category STRING
+)
+USING DELTA;
+
+--rollback DROP TABLE IF EXISTS workspace.bronze.products_raw;

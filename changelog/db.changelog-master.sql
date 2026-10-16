@@ -119,3 +119,38 @@ CREATE TABLE IF NOT EXISTS workspace.bronze.products_raw (
 USING DELTA;
 
 --rollback DROP TABLE IF EXISTS workspace.bronze.products_raw;
+
+--changeset estudiante:013
+CREATE TABLE IF NOT EXISTS workspace.bronze.customers_raw (
+    customer_id STRING,
+    customer_name STRING,
+    segment STRING,
+    city STRING,
+    country STRING
+)
+USING DELTA;
+
+--rollback DROP TABLE IF EXISTS workspace.bronze.customers_raw;
+
+--changeset estudiante:014
+CREATE TABLE IF NOT EXISTS workspace.bronze.stores_raw (
+    store_id STRING,
+    store_name STRING,
+    city STRING,
+    region STRING,
+    country STRING
+)
+
+USING DELTA;
+
+--rollback DROP TABLE IF EXISTS workspace.bronze.stores_raw;
+
+--changeset estudiante:015
+ALTER TABLE workspace.bronze.sales_raw
+ADD COLUMNS (
+    customer_id STRING,
+    store_id STRING
+);
+
+--rollback ALTER TABLE workspace.bronze.sales_raw DROP COLUMN customer_id;
+--rollback ALTER TABLE workspace.bronze.sales_raw DROP COLUMN store_id;

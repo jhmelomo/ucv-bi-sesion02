@@ -12,3 +12,7 @@ sources:
 
     - name: products_raw
       description: "Productos crudos."
+    
+    - name: customers_raw
+
+    - name: stores_raw

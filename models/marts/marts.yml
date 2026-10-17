@@ -1,0 +1,57 @@
+version: 2
+
+models:
+  - name: dim_product
+    columns:
+      - name: product_key
+        data_tests:
+          - not_null
+          - unique
+      - name: product_id
+        data_tests:
+          - not_null
+          - unique
+
+  - name: dim_customer
+    columns:
+      - name: customer_key
+        data_tests:
+          - not_null
+          - unique
+
+  - name: dim_store
+    columns:
+      - name: store_key
+        data_tests:
+          - not_null
+          - unique
+
+  - name: fact_sales
+    columns:
+      - name: sale_id
+        data_tests:
+          - not_null
+
+      - name: product_key
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_product')
+                field: product_key
+
+      - name: customer_key
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_customer')
+                field: customer_key
+
+      - name: store_key
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_store')
+                field: store_key

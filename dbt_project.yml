@@ -20,5 +20,7 @@ models:
   ucv_bi_dbt:
     staging:
       +materialized: view
-    intermediate:
-      +materialized: view
+      +schema: silver
+    marts:
+      +materialized: table
+      +schema: gold
